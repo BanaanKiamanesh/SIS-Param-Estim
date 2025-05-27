@@ -4,8 +4,9 @@
 % 0 and 2.
 function p = prior(x)
     if all(x >= 0 & x <= 2)
-        p = (1/2)^length(x);
+        %p = (1/2)^length(x);
+        p = -length(x) * log(2);
     else
-        p = 0;
+        p = -inf;
     end
 end
