@@ -6,7 +6,7 @@ function plot_A_dist(X, A_true, A_hat)
     
     for i = 1:2
         for j = 1:2
-            idx = (i * 2 + j) - 2;
+            idx = (j * 2 + i) - 2;
             component = titles{idx};
             subplot(2, 2, idx);
             hold on;
