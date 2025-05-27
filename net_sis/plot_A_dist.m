@@ -4,8 +4,8 @@ function plot_A_dist(X, A_true, A_hat)
     
     titles = {'A_{11}', 'A_{12}', 'A_{21}', 'A_{22}'};
     
-    for i = 1:2
-        for j = 1:2
+    for j = 1:2
+        for i = 1:2
             idx = (i * 2 + j) - 2;
             component = titles{idx};
             subplot(2, 2, idx);
