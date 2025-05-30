@@ -6,5 +6,5 @@ function plot_gamma_dist(X, gamma_true, gamma_hat)
     plot([gamma_true gamma_true], ylim, 'g--', 'LineWidth', 2)
     plot([gamma_hat gamma_hat], ylim, 'r--', 'LineWidth', 2)
     hold off;
-    legend('\gamma posterior', '\gamma_{true}', '\bar{\gamma}')
+    legend('\gamma posterior', '\gamma_{true}', '{\gamma hat}')
 end
