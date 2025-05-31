@@ -36,7 +36,7 @@ P           = diag([1e-3, 1e-3, 0.3, 0.3, 0.3, 0.3, 0.1]);
 
 % Process Noise
 QState      = diag([1e-4, 1e-4]);
-QParams     = diag([1e-4, 1e-4, 1e-6, 1e-6, 1e-6]);
+QParams     = diag(5e-8*ones(5,1));
 Q           = blkdiag(QState, QParams);
 
 % Measurement Noises
@@ -55,7 +55,7 @@ for k = 2:StepNum
     % ---- Update ----
     MeasRes          = YMeas(:, k) - XPred(1:2);
     S                = H * PPred * H' + R;
-    K                = PPred * H' / S;                      % Kalman Gain
+    K                = PPred * H' / S;                  % Kalman Gain
     Xhat(:, k)       = XPred + K * MeasRes;
     P                = (eye(7) - K*H)*PPred;
 end
