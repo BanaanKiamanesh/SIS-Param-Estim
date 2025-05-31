@@ -7,8 +7,7 @@ function plot_X_trajectory(X)
     % Plot Trajectory
     plot(X(1, :), X(end, :), 'o--', X(1,1), X(end,1), 'r*')
 
-    % Fit 2D gaussians to the data and draw ellipsis highlighting 1, 2 and
-    % 3 std. deviation.
+    % Draw Ellipses representing
     x = X(1, :)';
     y = X(end, :)';
     data = [x, y];

@@ -4,8 +4,9 @@ clc
 
 %% Parameters
 
+dt = 0.1;
+tspan = 0:dt:10;
 y0 = [0.09 0.15]';
-tspan = [0 10];
 N_nodes = 2;
 
 % True Model Parameters
@@ -22,7 +23,7 @@ plot_evolution(t, y_true, 'SIS Model - Population Dynamics')
 
 %% Simulated Noisy Measurements
 % Additive Gaussian Noise
-sigma = 0.05;
+sigma = 0.015;
 y_obs = y_true + sigma * randn(size(y_true));
 
 plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
