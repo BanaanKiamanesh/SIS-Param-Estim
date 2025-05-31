@@ -4,7 +4,7 @@ clc
 
 %% Parameters
 
-y0 = [0.09 0.15]';
+y0 = [0.09 0.15]'; 
 tspan = [0 10];
 N_nodes = 2;
 
@@ -21,15 +21,15 @@ gamma_true = 0.5;
 plot_evolution(t, y_true, 'SIS Model - Population Dynamics')
 
 %% Simulated Noisy Measurements
-% Additive Gaussian Noise
-sigma = 0.05;
+%Additive Gaussian Noise
+sigma = .025;
 y_obs = y_true + sigma * randn(size(y_true));
 
 plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
 
 %% MCMC Estimation
 
-N_samples = 100000;
+N_samples = 100000; 
 
 % Variance of the Random Walk used for candidate proposal
 Var_A = .018 * ones(N_nodes ^ 2, 1);  % For each matrix element
@@ -65,12 +65,11 @@ for i = 2:N_samples
     X(:,i) = x; 
     waitbar(i/N_samples, f);
 end
+% has to be beetwen 30-40% on average
+acceptance_rate_percent = (accepted / N_samples) * 100; 
 close(f)
 
-% Has to be beetwen 30-40% on average
-acceptance_rate_percent = (accepted / N_samples) * 100; 
-
-%% Minimum Variance Estimate Results
+% %% Minimum Variance Estimate Result
 burn_in = floor(0.15 * size(X, 2));  % burn-in of 15%
 X_post = X(:, burn_in+1:end);       
 
@@ -79,6 +78,7 @@ gamma_hat = mean(X_post(end, :));
 
 std_A_hat = unflatten(std(X_post(1:4, :), 0, 2));  
 std_gamma  = std(X_post(end, :), 0, 2);       
+
 
 disp("Results")
 disp(['Acceptance rate: ', num2str(acceptance_rate_percent), '%']);
@@ -92,5 +92,5 @@ disp(std_A_hat)
 fprintf('std_gamma: %0.2f \n', std_gamma)
 
 plot_X_trajectory(X)
-plot_A_dist(X_post, A_true, A_hat)
-plot_gamma_dist(X_post, gamma_true, gamma_hat)
+plot_A_dist(X, A_true, A_hat)
+plot_gamma_dist(X, gamma_true, gamma_hat)
