@@ -3,15 +3,18 @@
 % data.
 % 
 % Assuming a gaussian distribution
-function L = likelihood(theta, tspan, y_obs, y0, sigma)
-    A = unflatten(theta(1:end - 1));
-    gamma_ = theta(end);
+function L = likelihood(x, tspan, y_obs, y0, sigma)
+    A = unflatten(x(1:end - 2));
+    beta_ = x(end - 1);
+    gamma_ = x(end);
 
     try
-        [~, y_sim] = sim_net_sis(y0, A, gamma_, tspan);
+        [~, y_sim] = sim_net_sis(y0, A, beta_, gamma_, tspan);
     catch
         disp('A=')
         disp(A)
+        disp('beta=')
+        disp(beta_)
         disp('gamma=')
         disp(gamma_)
         error("Could not solve the Likelihood")
