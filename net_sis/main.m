@@ -13,14 +13,15 @@ N_nodes = 2;
 
 % True Model Parameters
 A_true = [
-    1.0 0.3
-    0.4 0.8
+    2.0 0.6
+    0.8 1.6
 ];
-beta_true = 2;
 gamma_true = 1.4;
 
+fprintf('True Effective Reproduction Number (R): %0.2f', calculate_R(A_true, gamma_true))
+
 %% Ideal Model
-[t, y_true] = sim_net_sis(y0, A_true, beta_true, gamma_true, tspan);
+[t, y_true] = sim_net_sis(y0, A_true, gamma_true, tspan);
 
 plot_evolution(t, y_true, 'SIS Model - Population Dynamics')
 
@@ -39,12 +40,11 @@ N_samples = 10000;
 
 % Variance of the Random Walk used for candidate proposal
 Var_A = .0036 * ones(N_nodes^2, 1);  % For each matrix element
-Var_beta = 0.0036;
 Var_gamma = .0036;
-Var_c = diag([Var_A; Var_beta; Var_gamma]);  
+Var_c = diag([Var_A; Var_gamma]);  
 
-% Initial Estimate - Start from a fully connected graph and R_0 = 1
-x = [flatten(eye(N_nodes)); 1; 1];
+% Initial Estimate
+x = [flatten(eye(N_nodes)); 1];
 
 % Memory Allocation
 X = zeros(length(x), N_samples); 
@@ -85,11 +85,11 @@ burn_in = floor(0.15 * size(X, 2));  % burn-in of 15%
 X_post = X(:, burn_in + 1:end);       
 
 A_hat     = unflatten(mean(X_post(1:N_nodes^2, :), 2));
-beta_hat = mean(X_post(end - 1, :));
 gamma_hat = mean(X_post(end, :));
 
+R_hat = calculate_R(A_hat, gamma_hat);
+
 std_A_hat = unflatten(std(X_post(1:N_nodes^2, :), 0, 2));  
-std_beta_hat = unflatten(std(X_post(end-1, :), 0, 2));  
 std_gamma_hat  = std(X_post(end, :), 0, 2);       
 
 disp("Results")
@@ -97,15 +97,13 @@ disp(['Acceptance rate: ', num2str(acceptance_rate_percent), '%']);
 disp("---------------")
 disp("A_hat=")
 disp(A_hat)
-fprintf('beta_hat: %0.2f \n', gamma_hat)
 fprintf('gamma_hat: %0.2f \n', gamma_hat)
-fprintf('Effective Reproduction Number (R_0): %0.2f \n', beta_hat / gamma_hat)
+fprintf('Effective Reproduction Number (R_0): %0.2f \n', R_hat)
 disp("---------------")
 disp("std_A_hat=")
 disp(std_A_hat)
-fprintf('std_beta_hat: %0.2f \n', std_beta_hat)
 fprintf('std_gamma_hat: %0.2f \n', std_gamma_hat)
 
 plot_X_trajectory(X)
 plot_A_dist(X_post, A_true, A_hat)
-plot_beta_gamma_dist(X_post, beta_true, beta_hat, gamma_true, gamma_hat)
+plot_gamma_dist(X_post, gamma_true, gamma_hat)

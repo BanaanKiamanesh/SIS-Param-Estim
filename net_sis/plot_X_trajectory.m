@@ -3,17 +3,17 @@ function plot_X_trajectory(X)
     figure;
     title('MCMC Trajectory')
 
-    beta_ = X(end - 1, :);
+    A_11 = X(1, :);
     gamma_ = X(end, :);
 
     % Plot Trajectory
     hold on;
-    plot(beta_, gamma_, 'o--', beta_(1), gamma_(1), 'r*')
+    plot(A_11, gamma_, 'o--', A_11(1), gamma_(1), 'r*')
 
     % Fit a 2D Gaussian to the data and draw ellipsis highlighting 1, 2 and
     % 3 std. deviation.
-    mu = mean([beta_', gamma_']);
-    Sigma = cov([beta_', gamma_']);
+    mu = mean([A_11', gamma_']);
+    Sigma = cov([A_11', gamma_']);
 
     plot_gaussian_ellipse(mu, Sigma, 1, 'g');
     plot_gaussian_ellipse(mu, Sigma, 2, 'y');
