@@ -78,11 +78,13 @@ Discuss nonlinearity, stochasticity, and potential identifiability issues.
 \section{Bayesian Framework for Parameter Estimation}
 \subsection{Bayesian Formulation}
 Define priors, likelihood, and posterior distribution:
-\begin{align*}
-    P(\theta | \text{data}) \propto P(\text{data} | \theta) P(\theta)
-\end{align*}
-Describe choice of priors for $\beta$, $\gamma$, etc.
-
+The Bayesian Framework is characterized by three fundamental probability distributions:
+\begin{itemize}
+    \item \textbf{Prior} ($P(\theta)$): Represents our initial knowledge about the parameters ($\theta$) \emph{before} observing any experimental data;
+    \item \textbf{Likelihood} ($P(\text{Data}|\theta)$): Describes the probability of observing the data given specific values of the parameters ($\theta$). It is a function of the parameters that quantifies how well these parameters explain the data.
+    \item \textbf{Posterior} ($P(\theta|\text{Data})$): Is the updated probability distribution of the parameters ($\theta$) after observing the data, obtained by combining the prior with the data observed through the likelihood, according to Bayes' Theorem.
+\end{itemize}
+The specification of prior distributions for the parameters, while not entirely arbitrary, involves an element of subjective choice. This choice is typically guided by the results of previous experiments, existing studies, or relevant scientific literature. For the parameters γ and β, we assume the prior distributions to be non-negative. Specifically, a uniform distribution over the interval [0, 2] is adopted for both.
 \subsection{MCMC Implementation}
 
 The network SIS model implemented in this study assumes a fixed population divided into $n = 2$ interconnected nodes, each representing a subpopulation or region. The model captures the dynamics of infection transmission using a contact matrix $A \in \mathbb{R}^{n \times n}$, where each entry $A_{ij}$ represents the transmission influence from node $j$ to node $i$. The recovery rate $\gamma$ is assumed homogeneous across all nodes. The infection fraction $x_i(t)$ at each node $i$ evolves according to the following system of differential equations:
