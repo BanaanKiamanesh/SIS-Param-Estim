@@ -6,18 +6,18 @@ rng(1296256323)  % For report reproducibility
 
 %% Parameters
 
-dt = 0.5;
-tspan = 0:dt:30;
+dt = 1;
+tspan = 0:dt:120;
 y0 = [0.01 0.018]';
 N_nodes = 2;
 
-% True Model Parameters - Trying to be around a reproduction number R=1.2
-% (inspired in the common cold, which is a typical SIS decease).
+% True Model Parameters - Trying to be "close" to a reproduction number R=1.28,
+% inspired in the common cold (influenza)).
 A_true = [
-    1.0 0.3
-    0.4 0.8
+  0.26  0.11
+  0.08  0.21
 ];
-gamma_true = 0.95;
+gamma_true = 0.2;  % Recovery Period of 5 days
 
 fprintf('True Effective Reproduction Number (R): %0.2f', calculate_R(A_true, gamma_true))
 
@@ -36,13 +36,13 @@ plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
 
 %% MCMC Estimation
 
-% N_samples = 10000;
-N_samples = 100000;
+N_samples = 10000;
+% N_samples = 100000;
 % N_samples = 1000000;
 
 % Variance of the Random Walk used for candidate proposal
-Var_A = .001 * ones(N_nodes^2, 1);  % For each matrix element
-Var_gamma = .001;
+Var_A = .0002 * ones(N_nodes^2, 1);  % For each matrix element
+Var_gamma = .0002;
 Var_c = diag([Var_A; Var_gamma]);  
 
 % Initial Estimate
