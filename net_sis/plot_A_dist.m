@@ -8,7 +8,7 @@ function plot_A_dist(X, A_true, A_hat)
             component = titles{idx};
             subplot(2, 2, idx);
             hold on;
-            hist(X(idx, :), 100);
+            histogram(X(idx, :), 100);
             plot([A_true(i, j), A_true(i, j)], ylim, 'g--', 'LineWidth', 2);
             plot([A_hat(i, j), A_hat(i, j)], ylim, 'r--', 'LineWidth', 2);
             title(['Simulated Posterior of ' component]);

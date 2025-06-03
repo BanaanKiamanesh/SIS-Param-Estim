@@ -6,17 +6,18 @@ rng(1296256323)  % For report reproducibility
 
 %% Parameters
 
-dt = 0.2;
-tspan = 0:dt:10;
-y0 = [0.0005 0.0009]';
+dt = 0.5;
+tspan = 0:dt:30;
+y0 = [0.01 0.018]';
 N_nodes = 2;
 
-% True Model Parameters
+% True Model Parameters - Trying to be around a reproduction number R=1.2
+% (inspired in the common cold, which is a typical SIS decease).
 A_true = [
-    2.0 0.6
-    0.8 1.6
+    1.0 0.3
+    0.4 0.8
 ];
-gamma_true = 1.4;
+gamma_true = 0.95;
 
 fprintf('True Effective Reproduction Number (R): %0.2f', calculate_R(A_true, gamma_true))
 
@@ -27,7 +28,7 @@ plot_evolution(t, y_true, 'SIS Model - Population Dynamics')
 
 %% Simulated Noisy Measurements
 % Additive Gaussian Noise
-sigma = 0.015;
+sigma = 0.005;
 y_obs = y_true + sigma * randn(size(y_true));
 y_obs = abs(y_obs);  % Ensure only positive values.
 
@@ -35,13 +36,13 @@ plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
 
 %% MCMC Estimation
 
-N_samples = 10000;
-% N_samples = 100000;
+% N_samples = 10000;
+N_samples = 100000;
 % N_samples = 1000000;
 
 % Variance of the Random Walk used for candidate proposal
-Var_A = .006 * ones(N_nodes^2, 1);  % For each matrix element
-Var_gamma = .006;
+Var_A = .001 * ones(N_nodes^2, 1);  % For each matrix element
+Var_gamma = .001;
 Var_c = diag([Var_A; Var_gamma]);  
 
 % Initial Estimate
@@ -99,7 +100,7 @@ disp("---------------")
 disp("A_hat=")
 disp(A_hat)
 fprintf('gamma_hat: %0.2f \n', gamma_hat)
-fprintf('Effective Reproduction Number (R_0): %0.2f \n', R_hat)
+fprintf('Estimated Effective Reproduction Number (R): %0.2f \n', R_hat)
 disp("---------------")
 disp("std_A_hat=")
 disp(std_A_hat)
