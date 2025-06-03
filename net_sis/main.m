@@ -35,12 +35,13 @@ plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
 
 %% MCMC Estimation
 
+N_samples = 1000000;
 % N_samples = 100000;
-N_samples = 10000;
+% N_samples = 10000;
 
 % Variance of the Random Walk used for candidate proposal
-Var_A = .0036 * ones(N_nodes^2, 1);  % For each matrix element
-Var_gamma = .0036;
+Var_A = .006 * ones(N_nodes^2, 1);  % For each matrix element
+Var_gamma = .006;
 Var_c = diag([Var_A; Var_gamma]);  
 
 % Initial Estimate
