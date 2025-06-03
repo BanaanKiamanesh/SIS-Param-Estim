@@ -35,9 +35,9 @@ plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
 
 %% MCMC Estimation
 
-N_samples = 1000000;
+N_samples = 10000;
 % N_samples = 100000;
-% N_samples = 10000;
+% N_samples = 1000000;
 
 % Variance of the Random Walk used for candidate proposal
 Var_A = .006 * ones(N_nodes^2, 1);  % For each matrix element
@@ -108,3 +108,6 @@ fprintf('std_gamma_hat: %0.2f \n', std_gamma_hat)
 plot_X_trajectory(X)
 plot_A_dist(X_post, A_true, A_hat)
 plot_gamma_dist(X_post, gamma_true, gamma_hat)
+
+[t, y_hat] = sim_net_sis(y0, A_hat, gamma_hat, tspan);
+plot_evolution(t, y_true - y_hat, 'Evolution Estimation Error')
