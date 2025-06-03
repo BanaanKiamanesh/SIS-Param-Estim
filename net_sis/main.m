@@ -11,11 +11,11 @@ tspan = 0:dt:120;
 y0 = [0.01 0.018]';
 N_nodes = 2;
 
-% True Model Parameters - Trying to be "close" to a reproduction number R=1.28,
+% True Model Parameters - Trying to be close to a reproduction number R=1.28,
 % inspired in the common cold (influenza)).
 A_true = [
-  0.26  0.11
-  0.08  0.21
+  0.22  0.08
+  0.06  0.17
 ];
 gamma_true = 0.2;  % Recovery Period of 5 days
 
