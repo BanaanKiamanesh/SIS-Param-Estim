@@ -36,8 +36,8 @@ plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
 
 %% MCMC Estimation
 
-N_samples = 10000;
-% N_samples = 100000;
+% N_samples = 10000;
+N_samples = 100000;
 % N_samples = 1000000;
 
 % Variance of the Random Walk used for candidate proposal
@@ -46,7 +46,7 @@ Var_gamma = .0002;
 Var_c = diag([Var_A; Var_gamma]);  
 
 % Initial Estimate
-x = [flatten(eye(N_nodes)); 1];
+x = [(1/N_nodes) * ones(N_nodes^2, 1); 0.3];
 
 % Memory Allocation
 X = zeros(length(x), N_samples); 
