@@ -1,5 +1,5 @@
 %% MCMC Trajectory Plot
-function plot_X_trajectory(X)
+function plot_X_trajectory(X, burn_in)
     figure;
     title('MCMC Trajectory')
 
@@ -12,8 +12,11 @@ function plot_X_trajectory(X)
 
     % Fit a 2D Gaussian to the data and draw ellipsis highlighting 1, 2 and
     % 3 std. deviation.
-    mu = mean([A_11', gamma_']);
-    Sigma = cov([A_11', gamma_']);
+    A_11_post = A_11(burn_in + 1:end);
+    gamma_post = gamma_(burn_in + 1:end);
+
+    mu = mean([A_11_post', gamma_post']);
+    Sigma = cov([A_11_post', gamma_post']);
 
     plot_gaussian_ellipse(mu, Sigma, 1, 'g');
     plot_gaussian_ellipse(mu, Sigma, 2, 'y');

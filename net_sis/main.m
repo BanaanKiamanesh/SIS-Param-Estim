@@ -105,7 +105,7 @@ disp("std_A_hat=")
 disp(std_A_hat)
 fprintf('std_gamma_hat: %0.2f \n', std_gamma_hat)
 
-plot_X_trajectory(X)
+plot_X_trajectory(X, burn_in)
 plot_A_dist(X_post, A_true, A_hat)
 plot_gamma_dist(X_post, gamma_true, gamma_hat)
 
