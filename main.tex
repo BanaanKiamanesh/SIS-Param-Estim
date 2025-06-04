@@ -12,18 +12,22 @@
 \geometry{margin=2.5cm}
 
 
-\title{Bayesian Parameter Estimation of the Network SIS Model using MCMC Methods}
-\author{ Banaan Kiamanesh, Pietro Ferraresi, Riccardo Bresolin,\\ Matteo Polo, 
-Mauricio Dada Fonseca De Freitas}
-\date{May 2025}
-
 \begin{document}
 
-\maketitle
+\begin{center}
+	{\LARGE\bfseries Bayesian Parameter Estimation of the Network SIS Model using MCMC Methods \par}
+	\vspace{0.6cm}
+	Banaan Kiamanesh, Pietro Ferraresi, Riccardo Bresolin, Matteo Polo,\\ Mauricio Dada Fonseca De Freitas \\
+	May 2025
+\end{center}
 
-\begin{abstract}
+\vspace{0cm}
+
+\begin{center}
+	\textbf{Abstract}
+\end{center}
 This project implements Bayesian parameter estimation for the Network SIS model using Markov Chain Monte Carlo (MCMC) methods. We aim to estimate key parameters such as network interaction and recovery rates, highlighting the advantages of Bayesian approaches over traditional estimation techniques.
-\end{abstract}
+
 
 \section{Introduction}
 
@@ -38,7 +42,7 @@ SOCIAL COMMITTEE AND THE COMMITTEE OF THE REGIONS" a Preparedness Union Strategy
 In this project, we aim to implement and test a Bayesian framework for parameter estimation in the Network SIS model using Markov Chain Monte Carlo (MCMC) methods. By leveraging synthetic data and exploring the challenges of numerical identifiability, we aim to demonstrate the advantages of Bayesian approaches over classical estimation techniques and contribute to the broader effort of building resilient, data-informed public health systems.
 
 
-\section{The Network SIR Model}
+\section{The Network SIS Model}
 \subsection{Model Equations}
 Present the SIS model for a network:
 
@@ -61,7 +65,7 @@ The term $\beta I (1 - I)$ represents the rate at which susceptibles become infe
 In matrix form, the system can be written compactly as:
 \[
 \boxed{
-\frac{d\mathbf{x}}{dt} = \operatorname{diag}(1 - \mathbf{x}) \, A \, \mathbf{x} - \gamma \mathbf{x}
+\frac{d\mathbf{x}}{dt} = \beta (I_n-\operatorname{diag}(\mathbf{x})) \, A \, \mathbf{x} - \gamma \mathbf{x}
 }
 \]
 where: 
@@ -84,7 +88,7 @@ The Bayesian Framework is characterized by three fundamental probability distrib
     \item \textbf{Likelihood} ($P(\text{Data}|\theta)$): Describes the probability of observing the data given specific values of the parameters ($\theta$). It is a function of the parameters that quantifies how well these parameters explain the data.
     \item \textbf{Posterior} ($P(\theta|\text{Data})$): Is the updated probability distribution of the parameters ($\theta$) after observing the data, obtained by combining the prior with the data observed through the likelihood, according to Bayes' Theorem.
 \end{itemize}
-The specification of prior distributions for the parameters, while not entirely arbitrary, involves an element of subjective choice. This choice is typically guided by the results of previous experiments, existing studies, or relevant scientific literature. For the parameters γ and β, we assume the prior distributions to be non-negative. Specifically, a uniform distribution over the interval [0, 2] is adopted for both.
+The specification of prior distributions for the parameters, while not entirely arbitrary, involves an element of subjective choice. This choice is typically guided by the results of previous experiments, existing studies, or relevant scientific literature. For the parameters $\gamma$ and $\beta$, we assume the prior distributions to be non-negative. Specifically, a uniform distribution over the interval [0, 2] is adopted for both.
 \subsection{MCMC Implementation}
 
 The network SIS model implemented in this study assumes a fixed population divided into $n = 2$ interconnected nodes, each representing a subpopulation or region. The model captures the dynamics of infection transmission using a contact matrix $A \in \mathbb{R}^{n \times n}$, where each entry $A_{ij}$ represents the transmission influence from node $j$ to node $i$. The recovery rate $\gamma$ is assumed homogeneous across all nodes. The infection fraction $x_i(t)$ at each node $i$ evolves according to the following system of differential equations:
@@ -110,9 +114,30 @@ The likelihood function assumes additive Gaussian measurement noise. The posteri
 \newpage
 \section{Simulation and Results}
 
+The simulation of the SIS model over a two-node network revealed the dynamic behavior of disease spread in a simple structured population. Using a fixed contact matrix $A$ and recovery rate $\gamma$, we observed the infection levels $y_1(t)$ and $y_2(t)$ in each node over time. Both populations began with low initial infection rates ($1\%$ and $1.8\%$ respectively), and the infection spread gradually due to interactions defined in the contact matrix $A = \begin{bmatrix} 1.0 & 0.3 \\ 0.4 & 0.8 \end{bmatrix}$. The plot of the true dynamics showed a typical sigmoidal (S-shaped) growth, with infection levels increasing exponentially at first and then stabilizing to an endemic equilibrium. Node 1 reached a higher steady-state infection ($\sim 25\%$) compared to Node 2 ($\sim 22\%$), likely due to a higher self-infection rate ($A(1,1) = 1.0$) and incoming connections from Node 2. These results confirm that both within-node and between-node transmission contribute significantly to long-term infection levels, and highlight the importance of network structure in epidemic modeling.
+
 \subsection{Results}
 
-
+\begin{figure}[h!]
+	\centering
+	% Prima immagine
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{immagini/PopDynamics1.jpg}
+		\label{fig:immagine1}
+	\end{minipage}
+	\hfill
+	% Seconda immagine
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{immagini/PopDynamics2.jpg}
+		\label{fig:immagine2}
+	\end{minipage}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{immagini/Posterior.jpg}
+\end{figure}
 
 
 \section{Discussion}
@@ -120,23 +145,22 @@ The likelihood function assumes additive Gaussian measurement noise. The posteri
 
 \section{Conclusion}
 
+This paper explored the dynamics of a deterministic SIS epidemic model over a simple two-node contact network. By numerically simulating the continuous-time nonlinear system, we analyzed the transient and steady-state behaviors of disease propagation starting from small initial infection levels. The results demonstrated how the infection evolves over time depending on the recovery rate and the structure of the contact matrix. Even in a minimal network, we observed complex dynamics, including different steady-state infection levels across nodes, emphasizing the importance of network heterogeneity in epidemic outcomes.
 
-\section*{Appendices}
+Our findings align with general principles in network epidemic theory, showing how the topology of interactions (i.e., who contacts whom) can significantly influence whether the disease dies out or becomes endemic. While we considered a static network and a basic SIS framework, this work provides a foundation for studying more complex models, including SIR and time-varying networks.
+
+Future work could expand this model to larger networks, incorporate stochastic effects, or investigate optimal intervention strategies. Furthermore, extending this analysis to SIR dynamics or multi-patch models could offer deeper insights into realistic epidemic scenarios where recovery leads to immunity or individuals move between subpopulations.
 
 
 \section*{References}
-\begin{thebibliography}{9}
 
-\bibitem[Pillonetto et al.(2003)]{pillonetto2003}
+
 Pillonetto, G., Sparacino, G., \& Cobelli, C. (2003).
 \textit{Numerical non-identifiability regions of the minimal model of glucose kinetics: superiority of Bayesian estimation}.
-Mathematical Biosciences.
-
-\bibitem[Gelman et al.(1995)]{gelman1995}
+Mathematical Biosciences.\\ \\
 Gelman, A., Carlin, J. B., Stern, H. S., \& Rubin, D. B. (1995).
 \textit{Bayesian Data Analysis}.
-Chapman and Hall.
-
-\end{thebibliography}
+Chapman and Hall.\\ \\
+Cognome, N. (Anno). *Titolo dell'opera in corsivo*. Casa editrice.
 
 \end{document}
