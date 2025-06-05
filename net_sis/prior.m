@@ -6,11 +6,13 @@ function p = prior(x)
     gamma_ = x(end);
 
     if all(x >= 0)
-        % log_p_A =  A_log_prior_symmetric(A_flat);
-        log_p_A =  A_log_prior_diagonal(A_flat);
-        % log_p_A =  A_log_prior_uniform(A_flat);
-
-        p = log_p_A + beta_log_prior(beta_) + gamma_log_prior(gamma_);
+        p = sum([
+            % A_log_prior_diagonal(A_flat)
+            % A_log_prior_symmetric(A_flat)
+            A_log_prior_uniform(A_flat)
+            beta_log_prior(beta_)
+            gamma_log_prior(gamma_)
+        ]);
     else
         p = -inf;
     end
@@ -27,11 +29,8 @@ function log_p_A = A_log_prior_diagonal(A_flat)
     log_p_A = - norm(A - eye(size(A)), 'fro')^2;
 end
 
-
-% Assuming uniform distribution between 0 and 2 for all components.
 function log_p_A = A_log_prior_uniform(A_flat)
-    log_p_A = 0;  % for uniform between 0 and 1
-    % log_p_A = -(length(A_flat) * log(2));
+    log_p_A = 0;  % uniform between 0 and 1
 end
 
 %% Beta Prior Log Probability
@@ -44,10 +43,9 @@ function log_p_beta = beta_log_prior(beta_)
 end
 
 %% Gamma Prior Log Probability
-% Assuming that the Serial Period (1/gamma) is following a gaussian with mean
-% on 3.6 days
+% Assuming that the Serial Period (1/gamma) is following a gaussian
 function log_p_gamma = gamma_log_prior(gamma_)
-    mu = 1/3.6;
+    mu = 1/4.1;
     sigma = 1/1.6;
 
     log_p_gamma = -0.5 * log(2*pi*sigma^2) - ((gamma_ - mu)^2) / (2*sigma^2);

@@ -8,8 +8,7 @@ rng(1296256323)  % For report reproducibility
 
 %% Parameters
 
-dt = 1;
-tspan = 0:dt:120;
+tspan = [0 120];
 y0 = [0.01 0.018]';
 N_nodes = 2;
 
@@ -32,35 +31,34 @@ plot_evolution(t, y_true, 'SIS Model - Population Dynamics')
 %% Simulated Noisy Measurements
 % Additive Gaussian Noise
 sigma = 0.015;
-y_obs = y_true + sigma * randn(size(y_true));
+y_obs = y_true + sigma .* randn(size(y_true));
 y_obs = abs(y_obs);  % Ensure only positive values.
 
 plot_evolution(t, y_obs, 'SIS Model - Noisy Measurements')
 
-
 %% MCMC Estimation
 
-% N_samples = 10000;
-N_samples = 100000;
+N_samples = 10000;
+% N_samples = 100000;
 % N_samples = 1000000;
 
 % Variance of the Random Walk used for candidate proposal
-Var_A = 0.01 * ones(N_nodes^2, 1);
-Var_beta = 0.001;
-Var_gamma = 0.001;
+Var_A = 0.0007 * ones(N_nodes^2, 1);
+Var_beta = 0.0007;
+Var_gamma = 0.0007;
 Var_c = diag([Var_A; Var_beta; Var_gamma]);  
 
 % Initial Estimate
-x = [(1/N_nodes) * ones(N_nodes^2, 1); 0.25; 0.25];
+x = [(1/N_nodes) * ones(N_nodes^2, 1); 0.36; 0.24];
 
 % Memory Allocation
 X = zeros(length(x), N_samples); 
 X(:, 1) = x;
 
 % Initial Density Calculation - prior * likelihood
-p_current = prior(x) + likelihood(x, t, y_obs, y0, sigma);
+p_current = prior(x) + likelihood(x, t, y_obs, y0);
 
-f = waitbar(0, 'Running MCMC Estimation...');
+f = waitbar(0);
 accepted = 0;
 for i = 2:N_samples
     c = x + Var_c' * randn(size(x));
@@ -70,7 +68,7 @@ for i = 2:N_samples
     end
 
     % Evaluate Density with new candidate parameters
-    p_candidate = prior(c) + likelihood(c, t, y_obs, y0, sigma); 
+    p_candidate = prior(c) + likelihood(c, t, y_obs, y0); 
 
     alpha = min(1, exp(p_candidate - p_current)); % Acceptance Probability
     if rand < alpha  % Candidate is accepted (spin the roulette!)
@@ -80,7 +78,7 @@ for i = 2:N_samples
     end
     
     X(:,i) = x; 
-    waitbar(i/N_samples, f);
+    waitbar(i/N_samples, f, sprintf('MCMC - Acp. Rate: %0.2f', accepted / i));
 end
 close(f)
 

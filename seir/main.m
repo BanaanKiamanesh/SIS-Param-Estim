@@ -31,16 +31,16 @@ plot_evolution(t, y_true, 'SEIR Model - Population Dynamics', {'S', 'E', 'I', 'R
 
 %% Simulated Noisy Measurements
 % Additive Gaussian Noise
-sigma = 5;
+sigma = 25;
 I_true = y_true(:, 3);
-I_obs = I_true + sigma^2 * randn(size(I_true));
+I_obs = I_true + sigma * randn(size(I_true));
 
 plot_evolution(t, [I_true I_obs], 'Noisy Measurements', {'True Infections', 'Observed Infections'})
 
 %% MCMC Estimation
 
-% N_samples = 10000;
-N_samples = 100000;
+N_samples = 10000;
+% N_samples = 100000;
 
 % Initial Estimate
 x = [0.31 0.53 0.24]';  % Prior Mean

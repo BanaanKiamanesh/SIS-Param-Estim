@@ -6,7 +6,7 @@
 function log_L = log_likelihood(x, tspan, I_obs, y0)
     [beta_, kappa, gamma_] = deal(x(1), x(2), x(3));
     try
-        [t, y_sim] = simulate_seir(y0, beta_, kappa, gamma_, tspan);
+        [~, y_sim] = simulate_seir(y0, beta_, kappa, gamma_, tspan);
     catch
         disp('Parameters =')
         disp(x)
@@ -15,8 +15,8 @@ function log_L = log_likelihood(x, tspan, I_obs, y0)
 
     I_sim = y_sim(:, 3);
     residuals = I_obs - I_sim;
-    sigma2 = var(residuals);
+    variance = var(residuals);
     n = length(I_obs);
 
-    log_L = -0.5 * n * log(2 * pi * sigma2) - sum((residuals).^2) / (2 * sigma2);
+    log_L = -0.5 * n * log(2 * pi * variance) - sum((residuals).^2) / (2 * variance);
 end
