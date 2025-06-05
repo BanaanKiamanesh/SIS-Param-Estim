@@ -6,7 +6,7 @@
 function log_L = log_likelihood(x, tspan, I_obs, y0)
     [beta_, kappa, gamma_] = deal(x(1), x(2), x(3));
     try
-        [~, y_sim] = simulate_seir(y0, beta_, kappa, gamma_, tspan);
+        [t, y_sim] = simulate_seir(y0, beta_, kappa, gamma_, tspan);
     catch
         disp('Parameters =')
         disp(x)

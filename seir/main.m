@@ -8,19 +8,18 @@ rng(1296256323)  % For report reproducibility
 
 %% Parameters
 
-dt = 0.5;
-tspan = 0:dt:120;
+tspan = [0 200];
 y0 = [
-    99900 % Susceptible
+    9900 % Susceptible
     90    % Exposed
     10    % Infectious
     0     % Recovered
-];
+]';
 
 % True Model Parameters - Trying to be close to a reproduction number R=1.28,
 % inspired in the common cold (influenza)).
 beta_true = 0.26;
-kappa_true = 0.50;
+kappa_true = 0.50;  % Latency Period of 2 days
 gamma_true = 0.20;  % Recovery Period of 5 days
 
 fprintf('True Basic Reproduction Number (R_0): %0.4f', beta_true / gamma_true)
@@ -40,16 +39,14 @@ plot_evolution(t, [I_true I_obs], 'Noisy Measurements', {'True Infections', 'Obs
 
 %% MCMC Estimation
 
-% N_samples = 100;
-N_samples = 10000;
-% N_samples = 100000;
-% N_samples = 1000000;
+% N_samples = 10000;
+N_samples = 100000;
 
 % Initial Estimate
-x = [0.5 0.5 0.5]';
+x = [0.31 0.53 0.24]';  % Prior Mean
 
 % Variance of the Random Walk used for candidate proposal
-Var_c = 0.01 * eye(length(x));
+Var_c = 0.0016 * eye(length(x));
 
 % Memory Allocation
 X = zeros(length(x), N_samples); 
