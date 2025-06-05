@@ -39,8 +39,8 @@ plot_evolution(t, [I_true I_obs], 'Noisy Measurements', {'True Infections', 'Obs
 
 %% MCMC Estimation
 
-N_samples = 10000;
-% N_samples = 100000;
+% N_samples = 10000;
+N_samples = 100000;
 
 % Initial Estimate
 x = [0.31 0.53 0.24]';  % Prior Mean

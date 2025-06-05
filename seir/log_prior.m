@@ -1,7 +1,7 @@
 %% Prior Functions
 % Calculate the Prior Log Probability for a particular set of parameters.
 function log_p = log_prior(x)
-    if all(x >= 0 & x <= 1)
+    if all(x >= 0)
         [beta_, kappa, gamma_] = deal(x(1), x(2), x(3));
         log_p = sum([
             beta_log_prior(beta_)
