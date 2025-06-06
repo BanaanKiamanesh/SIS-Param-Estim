@@ -83,9 +83,6 @@ where:
 \end{itemize}
 
 
-\subsection{Challenges in Parameter Estimation}
-Discuss nonlinearity, stochasticity, and potential identifiability issues.
-
 \section{Bayesian Framework for Parameter Estimation}
 \subsection{Bayesian Formulation}
 Define priors, likelihood, and posterior distribution:
@@ -118,7 +115,6 @@ The likelihood function assumes additive Gaussian measurement noise. The posteri
 \]
 
 
-\newpage
 \section{Simulation and Results}
 
 The simulation of the SIS model over a two-node network revealed the dynamic behavior of disease spread in a simple structured population. Using a fixed contact matrix $A$ and recovery rate $\gamma$, we observed the infection levels $y_1(t)$ and $y_2(t)$ in each node over time. Both populations began with low initial infection rates ($1\%$ and $1.8\%$ respectively), and the infection spread gradually due to interactions defined in the contact matrix $A = \begin{bmatrix} 1.0 & 0.3 \\ 0.4 & 0.8 \end{bmatrix}$. The plot of the true dynamics showed a typical sigmoidal (S-shaped) growth, with infection levels increasing exponentially at first and then stabilizing to an endemic equilibrium. Node 1 reached a higher steady-state infection ($\sim 25\%$) compared to Node 2 ($\sim 22\%$), likely due to a higher self-infection rate ($A(1,1) = 1.0$) and incoming connections from Node 2. These results confirm that both within-node and between-node transmission contribute significantly to long-term infection levels, and highlight the importance of network structure in epidemic modeling.
@@ -128,24 +124,33 @@ The simulation of the SIS model over a two-node network revealed the dynamic beh
 \begin{figure}[h!]
 	\centering
 	% Prima immagine
-	\begin{minipage}{0.45\textwidth}
+	\begin{minipage}{0.49\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{immagini/PopDynamics1.jpg}
+		\includegraphics[width=\textwidth]{immagini/PopDynamics1.1.jpg}
 		\label{fig:immagine1}
+		\caption{}
 	\end{minipage}
 	\hfill
 	% Seconda immagine
-	\begin{minipage}{0.45\textwidth}
+	\begin{minipage}{0.49\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{immagini/PopDynamics2.jpg}
+		\includegraphics[width=\textwidth]{immagini/PopDynamics2.1.jpg}
 		\label{fig:immagine2}
+		\caption{}
 	\end{minipage}
 \end{figure}
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{immagini/Posterior.jpg}
+	\includegraphics[width=\linewidth]{immagini/Posterior2.jpg}
+	\caption{}
 \end{figure}
 
+
+Figure 3 shows the simulated posterior distributions for four parameters. Each subplot is a histogram representing the distribution of sampled parameter values from the MCMC chains. The blue bars show the "distribution" of the sampled values. The red dashed line indicates the estimated value (likely the mean of the posterior, while the green dashed line represents the "true" parameter value.
+
+The results demonstrate the effectiveness of the MCMC algorithm in estimating the parameters of the SIS model even in the presence of noisy measurements. Figures 1 and 2 showcase the transition from an ideal model output to a more realistic scenario with observational noise, which is crucial for evaluating the robustness of the estimation method. Figure 3, show a good performance of the MCMC algorithm. For parameters $A_{11}$ and $A_{12}$, the true values are centrally located within the bulk of their respective posterior distributions, suggesting high accuracy in estimation. The estimated values are also very close to the true values, indicating good convergence. For $A_{21}$, while still showing some spread, the true value is well within the main mode of the posterior distribution. For $A_{22}$, the true value appears to be better captured by the distribution, with the estimated value also closer. The overall shape of the posterior distributions appears more concentrated around the true values, implying reduced uncertainty in the parameter estimates. This improvement suggests that the MCMC algorithm ran for a longer duration leading to more precise and accurate parameter inference.
+
+\vspace{2cm}
 \section{Extended Kalman Filter (EKF) for Parameter Estimation}
 
 The EKF is used to estimate the states \( \mathbf{x} = [x_1, x_2]^T \) and the parameters \( \theta = [a_{11}, a_{12}, a_{21}, a_{22}, \gamma]^T \) based on noisy measurements. The EKF algorithm follows these steps:
@@ -214,9 +219,15 @@ The following section shows the results obtained using EKF for the parameter est
 \item \( \hat{A} = \begin{bmatrix}  0.8691 & 0.4733 \\ 0.6573 &  0.6334\end{bmatrix} \) 
 \item \( \gamma = 0.3013 \)
 \end{itemize}
-\section{Discussion}
+\section{Discussion MCMC vs. EKF}
 
+The Markov Chain Monte Carlo (MCMC) algorithm is used to characterize the full posterior distribution of the model parameters after all data have been observed. It provides statistical estimates of the parameters—typically the mean and standard deviation—based on samples drawn from the posterior distribution.
 
+In contrast, the Extended Kalman Filter (EKF) is used for online estimation of both states and parameters. It updates these estimates sequentially, incorporating new measurements as they become available. As a result, its output is a time series of estimated states and parameters.
+
+While MCMC offers a comprehensive view of parameter uncertainty, it can be computationally demanding, especially when a large number of samples is needed. This is because it requires repeated simulations of the model and likelihood evaluations.
+
+The EKF, on the other hand, is generally more computationally efficient for online applications. It relies on matrix operations at each time step, which are typically faster than the extensive sampling and simulations required by MCMC.
 \section{Conclusion}
 
 This paper explored the dynamics of a deterministic SIS epidemic model over a simple two-node contact network. By numerically simulating the continuous-time nonlinear system, we analyzed the transient and steady-state behaviors of disease propagation starting from small initial infection levels. The results demonstrated how the infection evolves over time depending on the recovery rate and the structure of the contact matrix. Even in a minimal network, we observed complex dynamics, including different steady-state infection levels across nodes, emphasizing the importance of network heterogeneity in epidemic outcomes.
