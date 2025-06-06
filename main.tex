@@ -10,7 +10,14 @@
 \usepackage{hyperref}
 \usepackage{natbib}
 \geometry{margin=2.5cm}
-
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\usepackage{url}
 
 \begin{document}
 
@@ -139,7 +146,74 @@ The simulation of the SIS model over a two-node network revealed the dynamic beh
 	\includegraphics[width=\linewidth]{immagini/Posterior.jpg}
 \end{figure}
 
+\section{Extended Kalman Filter (EKF) for Parameter Estimation}
 
+The EKF is used to estimate the states \( \mathbf{x} = [x_1, x_2]^T \) and the parameters \( \theta = [a_{11}, a_{12}, a_{21}, a_{22}, \gamma]^T \) based on noisy measurements. The EKF algorithm follows these steps:
+
+\begin{enumerate}
+
+\item Prediction Step:
+\begin{itemize}
+\item Predict the state \( \hat{x}_{k|k-1} \) and the parameter estimates \( \hat{\theta}_{k|k-1} \) using the system dynamics.
+\item Predict the state covariance \( P_{k|k-1} \).
+\end{itemize}
+
+\item Update Step:
+\begin{itemize}
+\item Compute the measurement residual (innovation): \( \tilde{y}_k = y_k - h(\hat{x}_{k|k-1}) \), where \( h(\hat{x}) \) is the measurement model.
+\item Compute the Kalman gain \( K_k \).
+\item Update the state and parameter estimates: \( \hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \tilde{y}_k \).
+\item Update the state covariance: \( P_{k|k} = (I - K_k H) P_{k|k-1} \), where \( H \) is the measurement Jacobian.
+\end{itemize}
+\end{enumerate}
+
+The EKF proceeds iteratively, adjusting both the states and parameters based on the incoming measurements and their associated uncertainty.
+
+\section{Jacobian of the System}
+
+To implement the EKF, we need to compute the Jacobian of the system, which describes how the system evolves with respect to the states and parameters. The Jacobian matrix \( J(\tilde{x}) \) is given by:
+
+\[
+J(\tilde{x}) = \frac{\partial f(\tilde{x})}{\partial \tilde{x}} = \begin{bmatrix}
+\frac{\partial \dot{x}_1}{\partial x_1} & \frac{\partial \dot{x}_1}{\partial x_2} & \frac{\partial \dot{x}_1}{\partial a_{11}} & \frac{\partial \dot{x}_1}{\partial a_{12}} & \frac{\partial \dot{x}_1}{\partial a_{21}} & \frac{\partial \dot{x}_1}{\partial a_{22}} & \frac{\partial \dot{x}_1}{\partial \gamma} \\
+\frac{\partial \dot{x}_2}{\partial x_1} & \frac{\partial \dot{x}_2}{\partial x_2} & \frac{\partial \dot{x}_2}{\partial a_{11}} & \frac{\partial \dot{x}_2}{\partial a_{12}} & \frac{\partial \dot{x}_2}{\partial a_{21}} & \frac{\partial \dot{x}_2}{\partial a_{22}} & \frac{\partial \dot{x}_2}{\partial \gamma}
+\end{bmatrix}
+\]
+
+Where:
+
+\begin{itemize}
+\item \(
+\frac{\partial \dot{x}_1}{\partial x_1} = a_{11} - 2a_{11} x_1 - a_{12} x_2 - \gamma
+\)
+\item \(
+\frac{\partial \dot{x}_1}{\partial x_2} = (1 - x_1) a_{12}
+\)
+\item Similarly for other derivatives.
+\end{itemize}
+
+\subsection{Measurement Model Jacobian}
+
+Since the measurements only observe the infection levels, the measurement model \( h(\hat{x}) \) is:
+
+\[
+h(\hat{x}) = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+\]
+
+The Jacobian of the measurement model is:
+
+\[
+H = \begin{bmatrix} 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 & 0 & 0 & 0 \end{bmatrix}
+\]
+
+This Jacobian is used in the update step to compute the Kalman gain.
+
+\subsection{EKF Estimation Results}
+The following section shows the results obtained using EKF for the parameter estimation: 
+\begin{itemize}
+\item \( \hat{A} = \begin{bmatrix}  0.8691 & 0.4733 \\ 0.6573 &  0.6334\end{bmatrix} \) 
+\item \( \gamma = 0.3013 \)
+\end{itemize}
 \section{Discussion}
 
 
@@ -161,6 +235,7 @@ Mathematical Biosciences.\\ \\
 Gelman, A., Carlin, J. B., Stern, H. S., \& Rubin, D. B. (1995).
 \textit{Bayesian Data Analysis}.
 Chapman and Hall.\\ \\
+Randall Hoven  (2025). \textit{8.5 Using the EKF for Parameter Estimation}. \url{https://youtu.be/YWl0ltV79eQ}.
 Cognome, N. (Anno). *Titolo dell'opera in corsivo*. Casa editrice.
 
 \end{document}
