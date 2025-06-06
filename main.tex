@@ -33,7 +33,7 @@
 \begin{center}
 	\textbf{Abstract}
 \end{center}
-This project implements Bayesian parameter estimation for the Network SIS model using Markov Chain Monte Carlo (MCMC) methods. We aim to estimate key parameters such as network interaction and recovery rates, highlighting the advantages of Bayesian approaches over traditional estimation techniques.
+This project implements Bayesian parameter estimation for the Network SIS (Susceptible–Infected–Susceptible) model using Markov Chain Monte Carlo (MCMC) methods. We aim to estimate key parameters such as network interaction and recovery rates, highlighting the advantages of Bayesian approaches over traditional estimation techniques.
 
 
 \section{Introduction}
@@ -51,7 +51,7 @@ In this project, we aim to implement and test a Bayesian framework for parameter
 
 \section{The Network SIS Model}
 \subsection{Model Equations}
-Present the SIS model for a network:
+We consider the classical SIS model adapted to a network setting, where the infection dynamics are governed by the following differential equation:
 
 \[
 \boxed{
@@ -85,7 +85,6 @@ where:
 
 \section{Bayesian Framework for Parameter Estimation}
 \subsection{Bayesian Formulation}
-Define priors, likelihood, and posterior distribution:
 The Bayesian Framework is characterized by three fundamental probability distributions:
 \begin{itemize}
     \item \textbf{Prior} ($P(\theta)$): Represents our initial knowledge about the parameters ($\theta$) \emph{before} observing any experimental data;
@@ -219,6 +218,18 @@ The following section shows the results obtained using EKF for the parameter est
 \item \( \hat{A} = \begin{bmatrix}  0.8691 & 0.4733 \\ 0.6573 &  0.6334\end{bmatrix} \) 
 \item \( \gamma = 0.3013 \)
 \end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{immagini/error_distr.jpeg}
+	\caption{}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{immagini/true_vs_estim.jpeg}
+	\caption{}
+\end{figure}
+
 \section{Discussion MCMC vs. EKF}
 
 The Markov Chain Monte Carlo (MCMC) algorithm is used to characterize the full posterior distribution of the model parameters after all data have been observed. It provides statistical estimates of the parameters—typically the mean and standard deviation—based on samples drawn from the posterior distribution.
