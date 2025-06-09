@@ -21,5 +21,5 @@ function log_L = log_likelihood(x, tspan, y_obs, y0)
     variance = var(residuals(:));
     n = size(y_obs, 1);
 
-    log_L = -0.5 * n * log(2 * pi * variance) - sum(residuals(:).^2) / (2 * variance));
+    log_L = -0.5 * n * log(2 * pi * variance) - sum(residuals(:).^2) / (2 * variance);
 end

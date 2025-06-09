@@ -13,31 +13,38 @@ function log_p = log_prior(x)
     end
 end
 
-% TODO: Double Check Prior values
+%% Prior Log Probabilities
+% Assuming that the prior distributions are gaussian.
+% Mean values taken from
+%   Chowell G, Miller MA, Viboud C. - Seasonal influenza in the United States,
+%   France, and Australia: transmission and prospects for control. 
+%   Epidemiol Infect. 2008 Jun;136(6):852-64. doi: 10.1017/S0950268807009144. 
+%   Epub 2007 Jul 18. PMID: 17634159; PMCID: PMC2680121. 
+%
+% Standard Deviations are arbitrary
 
-%% Beta Prior Log Probability
+% Beta Prior Log Probability
 function log_p_beta = beta_log_prior(beta_)
-    mu = 0.31;
-    sigma = 0.1;
+    mu = 0.32;
+    sigma = 0.5;
 
     log_p_beta = -0.5 * log(2*pi*sigma^2) - ((beta_ - mu)^2) / (2*sigma^2);
 end
 
 
-%% Kappa Prior Log Probability
+% Kappa Prior Log Probability
 function log_p_kappa = kappa_log_prior(kappa)
     mu = 1/1.9;
-    sigma = 0.1;
+    sigma = 0.5;
 
     log_p_kappa = -0.5 * log(2*pi*sigma^2) - ((kappa - mu)^2) / (2*sigma^2);
 end
 
 
-%% Gamma Prior Log Probability
-% Assuming that the Serial Period (1/gamma) is following a gaussian
+% Gamma Prior Log Probability
 function log_p_gamma = gamma_log_prior(gamma_)
     mu = 1/4.1;
-    sigma = 1/1.6;
+    sigma = 0.5;
 
     log_p_gamma = -0.5 * log(2*pi*sigma^2) - ((gamma_ - mu)^2) / (2*sigma^2);
 end

@@ -4,7 +4,7 @@ clc
 % Promote ode warning to error, so we can catch it in `log_likelihood`
 warning('error', 'MATLAB:ode45:IntegrationTolNotMet');  
 
-rng(1296256323)  % For report reproducibility
+% rng(1296256323)  % For reproducibility
 
 %% Parameters
 

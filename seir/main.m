@@ -4,7 +4,7 @@ clc
 % Promote ode warning to error, so we can catch it in `likelihood`
 warning('error', 'MATLAB:ode45:IntegrationTolNotMet');  
 
-rng(1296256323)  % For report reproducibility
+% rng(1296256323)  % For reproducibility
 
 %% Parameters
 
@@ -16,8 +16,7 @@ y0 = [
     0     % Recovered
 ]';
 
-% True Model Parameters - Trying to be close to a reproduction number R=1.28,
-% inspired in the common cold (influenza)).
+% True Model Parameters - Trying to be close to a reproduction number R=1.3
 beta_true = 0.26;
 kappa_true = 0.50;  % Latency Period of 2 days
 gamma_true = 0.20;  % Recovery Period of 5 days
